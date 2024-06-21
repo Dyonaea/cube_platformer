@@ -6,6 +6,12 @@ void Platform::initPlatform(){
     this->solid.setFillColor(sf::Color::Green);
     this->solid.setSize(sf::Vector2f(sf::Vector2f(PLAWIDTH, PLAHEIGHT)));
 }
+void Platform::goLeft(){
+    this->pos.x -= 4; 
+}
+void Platform::goRight(){
+    this->pos.x +=4;
+}
 
 Platform::Platform(sf::Vector2f pos){
     this->pos = pos;
@@ -22,4 +28,7 @@ sf::RectangleShape Platform::getSolid(){
 }
 sf::Vector2f Platform::getPos(){
     return this->pos;
+}
+void Platform::update(){
+    this->solid.setPosition(this->pos);
 }

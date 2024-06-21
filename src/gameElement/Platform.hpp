@@ -15,4 +15,7 @@ class Platform : public sf::Drawable{
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         sf::RectangleShape getSolid();
         sf::Vector2f getPos();
+        void update();
+        void goLeft();
+        void goRight();
 };

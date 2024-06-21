@@ -8,11 +8,12 @@ class Application{
         sf::RenderWindow window;
         sf::Event event;
         sf::VideoMode video_mode;
-        std::vector<Platform> pads;
+        std::vector<Platform*> pads;
         Player player;
         void initWindow();
         void handleEvent();
         void updatePLayer();
+        void updatePads();
 
     public:
         Application();

@@ -8,15 +8,25 @@ void Player::initBody(){
 }
 
 void Player::jump(){
-    this->gravity = -10;
+    this->gravity = -7;
 }
 void Player::goLeft(){
-    this->pos.x -= 2;
+    this->pos.x -= 4;
 }
 void Player::goRight(){
-    this->pos.x += 2;
+    this->pos.x += 4;
+}
+void Player::padsLeft(){
+    for(Platform* pad : this->pads){
+        pad->goLeft();
+    }
 }
 
+void Player::padsRight(){
+    for(Platform* pad : this->pads){
+        pad->goRight();
+    }
+}
 void Player::move(){
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
     {
@@ -28,30 +38,37 @@ void Player::move(){
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
     {
+        if(this->pos.x < 600 )
         this->goRight();
+        else{
+            this->padsLeft();
+        }
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
+         if(this->pos.x > 50 )
         this->goLeft();
+        else{
+            this->padsRight();
+        }
     }
     
 }
 
 void Player::updatePos(){
     move();
-    if (this->frameInAir % 3 == 0)
-    {
-        this->pos.y += this->gravity;
-    }
     this->body.setPosition(pos);
+    this->pos.y += this->gravity;
 }
 
 bool Player::isOnTheGround(){
-    for(Platform pad : this->pads){
-        if (this->body.getGlobalBounds().intersects(pad.getSolid().getGlobalBounds()) && this->gravity > 0)
+    for(Platform* pad : this->pads){
+        if (this->body.getGlobalBounds().intersects(pad->getSolid().getGlobalBounds()) && this->gravity > 0)
         {
-            this->pos.y = pad.getPos().y - PSIDE +1;
+            this->pos.y = pad->getPos().y - PSIDE +1;
             return true;
+        }
+        else{
         }
     }
     if (this->pos.y + this->gravity >= GROUNDLEVEL)
@@ -59,6 +76,7 @@ bool Player::isOnTheGround(){
         this->pos.y = GROUNDLEVEL;
         return true;
     }
+    
     return false;
 }
 
@@ -72,7 +90,7 @@ void Player::updateGravity(){
         }
         else if (this->frameInAir % 15 == 0)
         {
-            this->gravity += this->frameInAir/30 +1;
+            this->gravity += this->frameInAir/30 + 2;
         } 
 
     }
@@ -82,8 +100,9 @@ void Player::updateGravity(){
     }
 }
 
-Player::Player(std::vector<Platform> pads){
+Player::Player(std::vector<Platform*> pads){
     this->pads = pads;
+    // std::cout <<  &((*this->pads)[0]) <<std::endl;
     initBody();
 }
 
